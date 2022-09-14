@@ -27,10 +27,10 @@ spec:
               type: array
               items:
                 type: string
-            cpu:
+            limit_cpu:
               description: "The maximum allowed cpu limit on a Pod, exclusive."
               type: string
-            memory:
+            limit_memory:
               description: "The maximum allowed memory limit on a Pod, exclusive."
               type: string
   targets:
@@ -144,14 +144,14 @@ spec:
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec[field][_]
           not is_exempt(container)
-          cpu_orig := container.resources.limits.cpu
+          cpu_orig := container.resources.limits.limit_cpu
           not canonify_cpu(cpu_orig)
           msg := sprintf("container <%v> cpu limit <%v> could not be parsed", [container.name, cpu_orig])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec[field][_]
           not is_exempt(container)
-          mem_orig := container.resources.limits.memory
+          mem_orig := container.resources.limits.limit_memory
           not canonify_mem(mem_orig)
           msg := sprintf("container <%v> memory limit <%v> could not be parsed", [container.name, mem_orig])
         }
