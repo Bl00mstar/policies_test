@@ -19,10 +19,10 @@ spec:
         openAPIV3Schema:
           type: object
           properties:
-            cpu:
+            request_cpu:
               description: "The maximum allowed cpu request on a Pod, exclusive."
               type: string
-            memory:
+            request_memory:
               description: "The maximum allowed memory request on a Pod, exclusive."
               type: string
   targets:
@@ -176,7 +176,7 @@ spec:
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec[field][_]
           not is_exempt(container)
-          mem_orig := container.resources.requests.memory
+          mem_orig := container.resources.requests.request_memory
           not canonify_mem(mem_orig)
           msg := sprintf("container <%v> memory request <%v> could not be parsed", [container.name, mem_orig])
         }
@@ -212,7 +212,7 @@ spec:
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec[field][_]
           not is_exempt(container)
-          cpu_orig := container.resources.requests.cpu
+          cpu_orig := container.resources.requests.request_cpu
           cpu := canonify_cpu(cpu_orig)
           max_cpu_orig := input.parameters.cpu
           max_cpu := canonify_cpu(max_cpu_orig)
