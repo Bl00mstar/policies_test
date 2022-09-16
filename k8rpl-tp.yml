@@ -17,19 +17,10 @@ spec:
         openAPIV3Schema:
           type: object
           properties:
-            ranges:
-              type: array
-              description: Allowed ranges for numbers of replicas.  Values are inclusive.
-              items:
-                type: object
-                description: A range of allowed replicas.  Values are inclusive.
-                properties:
-                  min_replicas:
-                    description: The minimum number of replicas allowed, inclusive.
-                    type: integer
-                  max_replicas:
-                    description: The maximum number of replicas allowed, inclusive.
-                    type: integer
+            min_replicas:
+              type: integer
+            max_replicas:
+              type: integer
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
@@ -42,11 +33,13 @@ spec:
         }
         input_replica_limit(spec) {
             provided := input.review.object.spec.replicas
-            count(input.parameters.ranges) > 0
-            range := input.parameters.ranges[_]
-            value_within_range(range, provided)
+            count(input.parameters.min_replicas) > 0
+            count(input.parameters.max_replicas) > 0
+            min_rpl := input.parameters.min_replicas
+            max_rpl := input.parameters.max_replicas
+            value_within_range(min_rpl, max_rpl, provided)
         }
-        value_within_range(range, value) {
-            range.min_replicas <= value
-            range.max_replicas >= value
+        value_within_range(min, max, value) {
+            min <= value
+            max >= value
         }
