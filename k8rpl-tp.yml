@@ -28,18 +28,21 @@ spec:
         deployment_name = input.review.object.metadata.name
         violation[{"msg": msg}] {
             spec := input.review.object.spec
-            not input_replica_limit(spec)
-            msg := sprintf("The provided number of replicas is not allowed for deployment: %v. Allowed ranges: %v", [deployment_name, input.parameters])
+            not input_replica_min_limit(spec)
+            msg := sprintf("MIN: %v. Allowed ranges: %v", [deployment_name, input.parameters.min_replicas])
         }
-        input_replica_limit(spec) {
+        violation[{"msg": msg}] {
+            spec := input.review.object.spec
+            not input_replica_max_limit(spec)
+            msg := sprintf("MAX: %v. Allowed ranges: %v", [deployment_name, input.parameters.max_replicas])
+        }
+        input_replica_min_limit(spec) {
             provided := input.review.object.spec.replicas
-            count(input.parameters.min_replicas) > 0
-            count(input.parameters.max_replicas) > 0
             min_rpl := input.parameters.min_replicas
-            max_rpl := input.parameters.max_replicas
-            value_within_range(min_rpl, max_rpl, provided)
+            min_rpl <= provided
         }
-        value_within_range(min, max, value) {
-            min <= value
-            max >= value
+        input_replica_max_limit(spec) {
+            provided := input.review.object.spec.replicas
+            max_rpl := input.parameters.max_replicas
+            max_rpl >= provided
         }
