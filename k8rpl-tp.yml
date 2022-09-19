@@ -29,7 +29,7 @@ spec:
         
         violation[{"msg": msg}] {
             not input.review.object.spec.replicas
-            msg := "You need to specify replicas!"
+            msg := sprintf("Minimum replicas requireds: %v", [input.review.object.spec.replicas,input.review.object.spec. ,input.parameters.min_replicas])
         }
 
         violation[{"msg": msg}] {
