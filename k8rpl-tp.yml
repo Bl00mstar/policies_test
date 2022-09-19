@@ -29,12 +29,8 @@ spec:
         
         violation[{"msg": msg}] {
             spec := input.review.object.spec
-            not input_replica_min_limit(spec)
-            msg := sprintf("MIN: %v. Allowed ranges: %v", [deployment_name, input.parameters.min_replicas,input.parameters.min_replicas])
-        }
-        
-        input_replica_min_limit(spec) {
             provided := input.review.object.spec.replicas
             min_rpl := input.parameters.min_replicas
-            min_rpl >= provided
+            min_rpl > provided
+            msg := sprintf("MIN: %v. Allowed ranges: %v", [deployment_name, input.parameters.min_replicas,min_rpl, provided])
         }
