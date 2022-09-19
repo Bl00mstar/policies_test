@@ -28,9 +28,16 @@ spec:
         deployment_name = input.review.object.metadata.name
         
         violation[{"msg": msg}] {
-            spec := input.review.object.spec
-            provided := input.review.object.spec.replicas
-            min_rpl := input.parameters.min_replicas
-            min_rpl > provided
-            msg := sprintf("MIN: %v. Allowed ranges: %v", [deployment_name, input.parameters.min_replicas,min_rpl, provided])
+            not input.request.object.spec.replicas
+            msg := "You need to specify replicas!"
+        }
+
+        violation[{"msg": msg}] {
+            input.request.object.spec.replicas < input.parameters.min_replicas
+            msg := sprintf("Minimum replicas requireds: %v", [input.parameters.min_replicas, input.request.object.spec.replicas])
+        }
+
+        violation[{"msg": msg}] {
+            input.request.object.spec.replicas > input.parameters.max_replicas
+            msg := sprintf("Maximum replicas requireds: %v", [input.parameters.max_replicas, input.request.object.spec.replicas])
         }
