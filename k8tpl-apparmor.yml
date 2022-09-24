@@ -1,0 +1,39 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8sazureenforceapparmor
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sAzureEnforceAppArmor
+      validation:
+        openAPIV3Schema:
+          properties:
+            allowedProfiles:
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sazureapparmor
+
+        violation[{"msg": msg, "details": {}}] {
+            metadata := input.review.object.metadata
+            container := input_containers[_]
+            not input_apparmor_allowed(container, metadata)
+            msg := sprintf("APPARMOR IS REQUIRED. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#.")
+        }
+
+        input_apparmor_allowed(container, metadata) {
+            metadata.annotations[key] == input.parameters.allowedProfiles[_]
+            key == sprintf("container.apparmor.security.beta.kubernetes.io/%v", [container.name])
+        }
+
+        input_containers[c] {
+            c := input.review.object.spec.containers[_]
+        }
+        input_containers[c] {
+            c := input.review.object.spec.initContainers[_]
+        }
