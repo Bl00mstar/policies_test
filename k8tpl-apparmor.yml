@@ -23,7 +23,7 @@ spec:
             metadata := input.review.object.metadata
             container := input_containers[_]
             not input_apparmor_allowed(container, metadata)
-            msg := sprintf("APPARMOR IS REQUIRED. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#.")
+            msg := sprintf("AppArmor profile is not allowed, pod: %v, container: %v. Allowed profiles: %v", [input.review.object.metadata.name, container.name, input.parameters.allowedProfiles])
         }
 
         input_apparmor_allowed(container, metadata) {
