@@ -54,7 +54,7 @@ spec:
           general_violation[{"msg": msg, "field": "initContainers"}]
         }
         general_violation[{"msg": msg, "field": field}] {
-          container := input.review.object.spec[field][_]
+          container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           provided := {resource_type | container.resources.limits[resource_type]}
           required := {resource_type | resource_type := input.parameters.limits[_]}
@@ -63,7 +63,7 @@ spec:
           msg := sprintf("container <%v> does not have <%v> limits defined", [container.name, missing])
         }
         general_violation[{"msg": msg, "field": field}] {
-          container := input.review.object.spec[field][_]
+          container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           provided := {resource_type | container.resources.requests[resource_type]}
           required := {resource_type | resource_type := input.parameters.requests[_]}
