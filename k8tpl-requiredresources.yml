@@ -60,7 +60,7 @@ spec:
           required := {resource_type | resource_type := input.parameters.limits[_]}
           missing := required - provided
           count(missing) > 0
-          msg := sprintf("CONTAINER HAS NO RESOURCE LIMITS. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#.")
+          msg := sprintf("container <%v> does not have <%v> limits defined", [container.name, missing])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec[field][_]
@@ -69,7 +69,7 @@ spec:
           required := {resource_type | resource_type := input.parameters.requests[_]}
           missing := required - provided
           count(missing) > 0
-          msg := sprintf("CONTAINER HAS NO RESOURCE LIMITS. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#.")
+          msg := sprintf("container <%v> does not have <%v> requests defined", [container.name, missing])
         }
       libs:
         - |
