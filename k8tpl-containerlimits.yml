@@ -159,25 +159,25 @@ spec:
           container := input.review.object.spec[field][_]
           not is_exempt(container)
           not container.resources
-          msg := sprintf("CONTAINER HAS NO RESOURCE LIMITS. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#.")
+          msg := sprintf("container <%v> has no resource limits", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec[field][_]
           not is_exempt(container)
           not container.resources.limits
-          msg := sprintf("CONTAINER HAS NO RESOURCE LIMITS. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#.")
+          msg := sprintf("container <%v> has no resource limits", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec[field][_]
           not is_exempt(container)
           missing(container.resources.limits, "cpu")
-          msg := sprintf("CONTAINER HAS NO RESOURCE LIMITS. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#.")
+          msg := sprintf("container <%v> has no cpu limit", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec[field][_]
           not is_exempt(container)
           missing(container.resources.limits, "memory")
-          msg := sprintf("CONTAINER HAS NO RESOURCE LIMITS. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#.")
+          msg := sprintf("container <%v> has no memory limit", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec[field][_]
@@ -187,7 +187,7 @@ spec:
           max_cpu_orig := input.parameters.cpu
           max_cpu := canonify_cpu(max_cpu_orig)
           cpu > max_cpu
-          msg := sprintf("CONTAINER HAS NO RESOURCE LIMITS. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#.")
+          msg := sprintf("container <%v> cpu limit <%v> is higher than the maximum allowed of <%v>", [container.name, cpu_orig, max_cpu_orig])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec[field][_]
@@ -197,7 +197,7 @@ spec:
           max_mem_orig := input.parameters.memory
           max_mem := canonify_mem(max_mem_orig)
           mem > max_mem
-          msg := sprintf("CONTAINER HAS NO RESOURCE LIMITS. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#.")
+          msg := sprintf("container <%v> memory limit <%v> is higher than the maximum allowed of <%v>", [container.name, mem_orig, max_mem_orig])
         }
       libs:
         - |
