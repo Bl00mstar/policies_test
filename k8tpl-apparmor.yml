@@ -18,22 +18,14 @@ spec:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package k8sazureapparmor
-
-        violation[{"msg": msg, "details": {}}] {
-            metadata := input.review.object.metadata
-            container := input_containers[_]
-            not input_apparmor_allowed(container, metadata)
-            msg := sprintf("AppArmor profile is not allowed, pod: %v, container: %v. Allowed profiles: %v", [input.review.object.metadata.name, container.name, input.parameters.allowedProfiles])
+        
+        violation contains {"msg": msg, "details": {}} if {
+	        metadata := input.review.object.spec.template.metadata
+	        not input_apparmor_allowed(metadata)
+	        msg := sprintf("APPARMOR ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [input.parameters.allowedProfiles])
         }
 
-        input_apparmor_allowed(container, metadata) {
-            metadata.annotations[key] == input.parameters.allowedProfiles[_]
-            key == sprintf("container.apparmor.security.beta.kubernetes.io/%v", [container.name])
-        }
-
-        input_containers[c] {
-            c := input.review.object.spec.containers[_]
-        }
-        input_containers[c] {
-            c := input.review.object.spec.initContainers[_]
+        input_apparmor_allowed(metadata) if {
+          key == sprintf("container.apparmor.security.beta.kubernetes.io/%v", [input.review.object.metadata.name])
+	        metadata.annotations[key] == input.parameters.allowedProfiles[_]
         }
