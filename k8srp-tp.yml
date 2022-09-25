@@ -55,5 +55,5 @@ spec:
         }
 
         get_violation_message(container, review, probe) = msg {
-            msg := sprintf("Container <%v> in your <%v> <%v> has no <%v>", [container.name, review.kind.kind, review.object.metadata.name, probe])
+            msg := sprintf("PROBES REQUIRED. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#.")
         }
