@@ -142,45 +142,45 @@ spec:
         }
         # Ephemeral containers not checked as it is not possible to set field.
         general_violation[{"msg": msg, "field": field}] {
-          container := input.review.object.spec[field][_]
+          container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           cpu_orig := container.resources.requests.cpu
           not canonify_cpu(cpu_orig)
           msg := sprintf("container <%v> cpu request <%v> could not be parsed", [container.name, cpu_orig])
         }
         general_violation[{"msg": msg, "field": field}] {
-          container := input.review.object.spec[field][_]
+          container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           mem_orig := container.resources.requests.memory
           not canonify_mem(mem_orig)
           msg := sprintf("container <%v> memory request <%v> could not be parsed", [container.name, mem_orig])
         }
         general_violation[{"msg": msg, "field": field}] {
-          container := input.review.object.spec[field][_]
+          container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           not container.resources
           msg := sprintf("container <%v> has no resource requests", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
-          container := input.review.object.spec[field][_]
+          container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           not container.resources.requests
           msg := sprintf("container <%v> has no resource requests", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
-          container := input.review.object.spec[field][_]
+          container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           missing(container.resources.requests, "cpu")
           msg := sprintf("container <%v> has no cpu request", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
-          container := input.review.object.spec[field][_]
+          container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           missing(container.resources.requests, "memory")
           msg := sprintf("container <%v> has no memory request", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
-          container := input.review.object.spec[field][_]
+          container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           cpu_orig := container.resources.requests.cpu
           cpu := canonify_cpu(cpu_orig)
@@ -190,7 +190,7 @@ spec:
           msg := sprintf("container <%v> cpu request <%v> is higher than the maximum allowed of <%v>", [container.name, cpu_orig, max_cpu_orig])
         }
         general_violation[{"msg": msg, "field": field}] {
-          container := input.review.object.spec[field][_]
+          container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           mem_orig := container.resources.requests.memory
           mem := canonify_mem(mem_orig)
