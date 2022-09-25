@@ -146,38 +146,38 @@ spec:
           not is_exempt(container)
           cpu_orig := container.resources.requests.cpu
           not canonify_cpu(cpu_orig)
-          msg := sprintf("container <%v> cpu request <%v> could not be parsed", [container.name, cpu_orig])
+          msg := sprintf("LIMITS/REQUESTS ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [container.name, cpu_orig])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           mem_orig := container.resources.requests.memory
           not canonify_mem(mem_orig)
-          msg := sprintf("container <%v> memory request <%v> could not be parsed", [container.name, mem_orig])
+          msg := sprintf("LIMITS/REQUESTS ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [container.name, mem_orig])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           not container.resources
-          msg := sprintf("container <%v> has no resource requests", [container.name])
+          msg := sprintf("LIMITS/REQUESTS ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           not container.resources.requests
-          msg := sprintf("container <%v> has no resource requests", [container.name])
+          msg := sprintf("LIMITS/REQUESTS ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           missing(container.resources.requests, "cpu")
-          msg := sprintf("container <%v> has no cpu request", [container.name])
+          msg := sprintf("LIMITS/REQUESTS ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec.template.spec[field][_]
           not is_exempt(container)
           missing(container.resources.requests, "memory")
-          msg := sprintf("container <%v> has no memory request", [container.name])
+          msg := sprintf("LIMITS/REQUESTS ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [container.name])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec.template.spec[field][_]
@@ -187,7 +187,7 @@ spec:
           max_cpu_orig := input.parameters.cpu
           max_cpu := canonify_cpu(max_cpu_orig)
           cpu > max_cpu
-          msg := sprintf("container <%v> cpu request <%v> is higher than the maximum allowed of <%v>", [container.name, cpu_orig, max_cpu_orig])
+          msg := sprintf("LIMITS/REQUESTS ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [container.name, cpu_orig, max_cpu_orig])
         }
         general_violation[{"msg": msg, "field": field}] {
           container := input.review.object.spec.template.spec[field][_]
@@ -197,7 +197,7 @@ spec:
           max_mem_orig := input.parameters.memory
           max_mem := canonify_mem(max_mem_orig)
           mem > max_mem
-          msg := sprintf("container <%v> memory request <%v> is higher than the maximum allowed of <%v>", [container.name, mem_orig, max_mem_orig])
+          msg := sprintf("LIMITS/REQUESTS ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [container.name, mem_orig, max_mem_orig])
         }
       libs:
         - |
