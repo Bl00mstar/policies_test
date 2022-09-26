@@ -34,7 +34,7 @@ spec:
         }
 
         violation[{"msg": msg}] {
-            container := input.spec.template.spec.containers[_]
+            container := input.review.object.spec.template.spec.containers[_]
             probe := input.parameters.probes[_]
             probe_is_missing(container, probe)
             msg := sprintf("PROBES/PROBETYPES ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [container.name])
