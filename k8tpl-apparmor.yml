@@ -18,14 +18,13 @@ spec:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package k8senforceapparmor
-        
-        violation contains {"msg": msg, "details": {}} if {
-            metadata := input.review.object.spec.template.metadata
-            not input_apparmor_allowed(metadata)
-            msg := sprintf("APPARMOR ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [input.parameters.allowedProfiles])
+        violation[{"msg": msg}] {
+          metadata := input.review.object.spec.template.metadata
+          not input_apparmor_allowed(metadata)
+          msg := sprintf("APPARMOR ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [input.parameters.allowedProfiles])
         }
 
         input_apparmor_allowed(metadata) if {
-            key == sprintf("container.apparmor.security.beta.kubernetes.io/%v", [input.review.object.metadata.name])
-            metadata.annotations[key] == input.parameters.allowedProfiles[_]
-        }
+          key == sprintf("container.apparmor.security.beta.kubernetes.io/%v", [input.review.object.metadata.name])
+          metadata.annotations[key] == input.parameters.allowedProfiles[_]
+        } 
