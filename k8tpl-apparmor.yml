@@ -6,7 +6,7 @@ spec:
   crd:
     spec:
       names:
-        kind: K8sAzureEnforceAppArmor
+        kind: K8sEnforceAppArmor
       validation:
         openAPIV3Schema:
           properties:
@@ -17,7 +17,7 @@ spec:
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
-        package k8sazureapparmor
+        package k8senforceapparmor
         
         violation contains {"msg": msg, "details": {}} if {
             metadata := input.review.object.spec.template.metadata
