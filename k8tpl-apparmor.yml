@@ -24,7 +24,7 @@ spec:
           msg := sprintf("APPARMOR ERROR. MORE: https://dev.azure.com/MerlinPlatform/Microservices/_wiki?pageId=529&friendlyName=Microservices-k8s-deployment#", [input.parameters.allowedProfiles])
         }
 
-        input_apparmor_allowed(metadata) if {
+        input_apparmor_allowed(metadata) {
           key == sprintf("container.apparmor.security.beta.kubernetes.io/%v", [input.review.object.metadata.name])
           metadata.annotations[key] == input.parameters.allowedProfiles[_]
         } 
